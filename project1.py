@@ -38,8 +38,12 @@ def hinge_loss_single(feature_vector, label, theta, theta_0):
         the hinge loss, as a float, associated with the given data point and
         parameters.
     """
-    # Your code here
-    raise NotImplementedError
+    agreement = label * np.add(np.dot(theta, feature_vector),theta_0)
+    if agreement >= 1:
+        return 0
+    else:
+        return 1 - agreement
+
 
 
 
