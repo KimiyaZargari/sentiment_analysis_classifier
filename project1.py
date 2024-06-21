@@ -63,9 +63,11 @@ def hinge_loss_full(feature_matrix, labels, theta, theta_0):
         the hinge loss, as a float, associated with the given dataset and
         parameters.  This number should be the average hinge loss across all of
     """
-
-    # Your code here
-    raise NotImplementedError
+    loss = 0
+    n = len(feature_matrix)
+    for i in range(n):
+        loss = loss + hinge_loss_single(feature_matrix[i], labels[i], theta, theta_0)
+    return loss / n
 
 
 
