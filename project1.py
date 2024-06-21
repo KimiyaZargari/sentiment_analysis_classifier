@@ -93,9 +93,11 @@ def perceptron_single_step_update(
         the updated feature-coefficient parameter `theta` as a numpy array
         the updated offset parameter `theta_0` as a floating point number
     """
-    # Your code here
-    raise NotImplementedError
-
+    z = label * np.add(np.dot(current_theta, feature_vector), current_theta_0)
+    if z <= 0:
+        current_theta = np.add(current_theta,  label * feature_vector)
+        current_theta_0 = current_theta_0 + label
+    return current_theta, current_theta_0
 
 
 def perceptron(feature_matrix, labels, T):
