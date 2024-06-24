@@ -1,7 +1,7 @@
 from string import punctuation, digits
 import numpy as np
 import random
-
+import re
 
 
 #==============================================================================
@@ -167,9 +167,6 @@ def average_perceptron(feature_matrix, labels, T):
             thet_0_sum = thet_0_sum + theta_0
             theta_sum = theta_sum + theta
     return theta_sum/(T * len(feature_matrix)), thet_0_sum/(T * len(feature_matrix))
-
-
-
 
 def pegasos_single_step_update(
         feature_vector,
@@ -347,8 +344,6 @@ def extract_words(text):
         a list of lowercased words in the string, where punctuation and digits
         count as their own words.
     """
-    # Your code here
-   # raise NotImplementedError
 
     for c in punctuation + digits:
         text = text.replace(c, ' ' + c + ' ')
@@ -358,22 +353,24 @@ def extract_words(text):
 
 def bag_of_words(texts, remove_stopword=False):
     """
-    NOTE: feel free to change this code as guided by Section 3 (e.g. remove
-    stopwords, add bigrams etc.)
-
     Args:
         `texts` - a list of natural language strings.
     Returns:
         a dictionary that maps each word appearing in `texts` to a unique
         integer `index`.
     """
-    
     indices_by_word = {}  # maps word to unique index
+    stopword = []
+    with open('stopwords.txt', 'r', encoding='utf-8') as file:
+        for line in file:
+            # Use regex to find words in the line
+            line_words = re.findall(r'\b\w+\b', line.lower())
+            stopword.extend(line_words)
     for text in texts:
         word_list = extract_words(text)
         for word in word_list:
             if word in indices_by_word: continue
-           # if word in stopword: continue
+            if word in stopword: continue
             indices_by_word[word] = len(indices_by_word)
 
     return indices_by_word
@@ -390,7 +387,6 @@ def extract_bow_feature_vectors(reviews, indices_by_word, binarize=True):
         matrix thus has shape (n, m), where n counts reviews and m counts words
         in the dictionary.
     """
-    # Your code here
     feature_matrix = np.zeros([len(reviews), len(indices_by_word)], dtype=np.float64)
     for i, text in enumerate(reviews):
         word_list = extract_words(text)
